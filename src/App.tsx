@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Editor from "./components/Editor";
 import Header from "./components/Header";
-import Nav from "./components/Nav";
+import Nav from "./components/DocNav";
 import type { Doc } from "./types/docs";
 
 function App() {

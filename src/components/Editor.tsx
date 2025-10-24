@@ -2,9 +2,11 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Typography from "@tiptap/extension-typography";
 import Highlight from "@tiptap/extension-highlight";
+import Button from "./Button";
 import { initialDoc } from "../constants/initialDoc";
 import { useEffect, useState } from "react";
 import type { Doc } from "../types/docs";
+import Input from "./Input";
 
 type EditorProp = {
   onSetDoc: (doc: Doc) => void;
@@ -29,7 +31,11 @@ export default function Editor({ onSetDoc, currentDoc }: EditorProp) {
   const handleSetDoc = () => {
     const title = editor.getText().split("\n")[0];
     const doc: Doc = {
+      id: "",
       title: title,
+      path: "",
+      format: "markdown",
+      updated_at: new Date().toString(),
       content: editor.getHTML(),
     };
 
@@ -37,10 +43,14 @@ export default function Editor({ onSetDoc, currentDoc }: EditorProp) {
   };
 
   return (
-    <div className="m-16">
-      <button onClick={() => onSetDoc(handleSetDoc())}>Salvar</button>
-
+    <div className="flex flex-col gap-3 mx-6 my-4">
+      <Input label="Título" placeholder="Títiulo"></Input>
+      <Input
+        label="Path"
+        placeholder="Ex: home/projeto-x/front-end/components/card-component "
+      ></Input>
       <EditorContent className="prose" editor={editor} />
+      <Button onClick={() => onSetDoc(handleSetDoc())}>Salvar</Button>
     </div>
   );
 }
