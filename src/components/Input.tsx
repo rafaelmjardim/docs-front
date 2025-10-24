@@ -6,7 +6,7 @@ export type InputProps = ComponentProps<"input"> & {
 
 export default function Input(props: InputProps) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex w-full flex-col gap-1">
       {props.label && (
         <label className="text-sm font-medium">{props.label}</label>
       )}

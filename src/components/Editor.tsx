@@ -19,6 +19,11 @@ export default function Editor({ onSetDoc, currentDoc }: EditorProp) {
   const editor = useEditor({
     extensions: [StarterKit, Highlight, Typography],
     content,
+    editorProps: {
+      attributes: {
+        class: "focus:outline-none",
+      },
+    },
   });
 
   useEffect(() => {
@@ -49,7 +54,10 @@ export default function Editor({ onSetDoc, currentDoc }: EditorProp) {
         label="Path"
         placeholder="Ex: home/projeto-x/front-end/components/card-component "
       ></Input>
-      <EditorContent className="prose" editor={editor} />
+      <EditorContent
+        editor={editor}
+        className="prose border border-gray-300 rounded-md px-8 w-full max-w-full"
+      />
       <Button onClick={() => onSetDoc(handleSetDoc())}>Salvar</Button>
     </div>
   );
