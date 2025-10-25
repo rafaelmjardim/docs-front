@@ -14,6 +14,7 @@ type EditorProp = {
 };
 
 export default function Editor({ onSetDoc, currentDoc }: EditorProp) {
+  const [form, setForm] = useState({ title: "", path: "" });
   const [content, setContent] = useState<string>(initialDoc);
 
   const editor = useEditor({
@@ -26,6 +27,11 @@ export default function Editor({ onSetDoc, currentDoc }: EditorProp) {
     },
   });
 
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
   useEffect(() => {
     if (editor && currentDoc) {
       editor.commands.setContent(currentDoc.content);
@@ -34,11 +40,10 @@ export default function Editor({ onSetDoc, currentDoc }: EditorProp) {
   }, [currentDoc, editor]);
 
   const handleSetDoc = () => {
-    const title = editor.getText().split("\n")[0];
     const doc: Doc = {
       id: "",
-      title: title,
-      path: "",
+      title: form.title,
+      path: form.path,
       format: "markdown",
       updated_at: new Date().toString(),
       content: editor.getHTML(),
@@ -48,15 +53,25 @@ export default function Editor({ onSetDoc, currentDoc }: EditorProp) {
   };
 
   return (
-    <div className="flex flex-col gap-3 mx-6 my-4">
-      <Input label="Título" placeholder="Títiulo"></Input>
+    <div className="flex flex-col gap-2 mx-6 my-4">
+      <Input
+        label="Título"
+        placeholder="Títiulo"
+        name="title"
+        onChange={handleChangeInput}
+      ></Input>
       <Input
         label="Path"
         placeholder="Ex: home/projeto-x/front-end/components/card-component "
+        name="path"
+        onChange={handleChangeInput}
       ></Input>
+      <p className="text-xs text-gray-500">
+        Use / para criar hierarquia (ex: home/projeto/frontend)
+      </p>
       <EditorContent
         editor={editor}
-        className="prose border border-gray-300 rounded-md px-8 w-full max-w-full"
+        className="prose border mt-4 border-gray-300 rounded-md px-8 w-full max-w-full"
       />
       <Button onClick={() => onSetDoc(handleSetDoc())}>Salvar</Button>
     </div>

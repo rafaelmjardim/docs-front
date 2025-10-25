@@ -11,6 +11,7 @@ function App() {
   const handleSetDoc = (newDoc: Doc) => {
     const docsList = [...docs, newDoc];
     setDocs(docsList);
+    console.log("docsList", docsList);
   };
 
   return (
