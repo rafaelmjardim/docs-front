@@ -8,14 +8,20 @@ interface DocTreeProps {
   level?: number;
 }
 
-export function DocTree({ nodes, onSelect, level = 1 }: DocTreeProps) {
+export function DocTree({
+  nodes,
+  onSelect,
+  selectedPath,
+  level = 0,
+}: DocTreeProps) {
   return (
-    <div>
+    <div className={`${level > 0 ? "ml-2" : ""}`}>
       {nodes.map((node) => (
         <DocTreeItem
           key={node.path}
           node={node}
           onSelect={onSelect}
+          selectedPath={selectedPath}
           level={level}
         ></DocTreeItem>
       ))}

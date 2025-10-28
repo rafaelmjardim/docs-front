@@ -7,7 +7,7 @@ import { initialDocs } from "./lib/storage";
 import { buildTree } from "./lib/tree-build";
 
 function App() {
-  const [docs, setDocs] = useState<Doc[]>([]);
+  const [docs, setDocs] = useState<Doc[]>(initialDocs);
   const [tree, setTree] = useState<TreeNode[]>([]);
   const [currentDocIndex, setCurrentDocIndex] = useState<number | null>(null);
   const [selectedDoc, setSelectedDoc] = useState<Doc | null>(null);
@@ -24,8 +24,8 @@ function App() {
   };
 
   const loadDocs = () => {
-    const docs = getDocs();
-    setDocs(docs);
+    const docList = docs;
+    setDocs(docList);
     setTree(buildTree(docs));
 
     if (!selectedDoc && docs.length > 0) {
@@ -33,8 +33,11 @@ function App() {
     }
   };
 
-  const getDocs = () => {
-    return initialDocs;
+  const setNewDoc = (doc: Doc) => {
+    const newDocList = docs;
+    newDocList.push(doc);
+    setDocs(newDocList);
+    loadDocs();
   };
 
   return (
@@ -45,12 +48,9 @@ function App() {
           <Nav
             nodes={tree}
             onSelect={handleSelectNode}
-            onCurrentDocIndex={setCurrentDocIndex}
+            selectedPath={selectedDoc?.path}
           />
-          <Editor
-            onSetTree={handleSelectNode}
-            currentDoc={currentDocIndex !== null ? docs[currentDocIndex] : null}
-          />
+          <Editor onSetTree={setNewDoc} selectedDoc={selectedDoc} />
         </main>
       </div>
     </>

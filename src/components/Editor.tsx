@@ -9,11 +9,11 @@ import type { Doc, TreeNode } from "../types/docs";
 import Input from "./Input";
 
 type EditorProp = {
-  onSetTree: (tree: TreeNode) => void;
-  currentDoc: Doc | null;
+  onSetTree: (doc: Doc) => void;
+  selectedDoc: Doc | null;
 };
 
-export default function Editor({ onSetTree, currentDoc }: EditorProp) {
+export default function Editor({ onSetTree, selectedDoc }: EditorProp) {
   const [form, setForm] = useState({ title: "", path: "" });
   const [content, setContent] = useState<string>(initialDoc);
 
@@ -33,11 +33,11 @@ export default function Editor({ onSetTree, currentDoc }: EditorProp) {
   };
 
   useEffect(() => {
-    if (editor && currentDoc) {
-      editor.commands.setContent(currentDoc.content);
-      setContent(currentDoc.content);
+    if (editor && selectedDoc) {
+      editor.commands.setContent(selectedDoc.content);
+      setContent(selectedDoc.content);
     }
-  }, [currentDoc, editor]);
+  }, [selectedDoc, editor]);
 
   const handleSetTree = () => {
     const doc: Doc = {
@@ -49,14 +49,14 @@ export default function Editor({ onSetTree, currentDoc }: EditorProp) {
       content: editor.getHTML(),
     };
 
-    const newTree: TreeNode = {
-      name: form.title, //Trocar pelo ultimo caminho do path
-      path: form.path,
-      doc: doc,
-      children: [],
-    };
+    // const newTree: TreeNode = {
+    //   name: form.title, //Trocar pelo ultimo caminho do path
+    //   path: form.path,
+    //   doc: doc,
+    //   children: [],
+    // };
 
-    return newTree;
+    return doc;
   };
 
   return (
@@ -80,7 +80,11 @@ export default function Editor({ onSetTree, currentDoc }: EditorProp) {
         editor={editor}
         className="prose border mt-4 border-gray-300 rounded-md px-8 w-full max-w-full"
       />
-      <Button onClick={() => onSetTree(handleSetTree())}>Salvar</Button>
+
+      <div className="flex items-center gap-2">
+        <Button onClick={() => onSetTree(handleSetTree())}>Salvar</Button>
+        <Button className="bg-red-500 hover:bg-red-700">Deletar</Button>
+      </div>
     </div>
   );
 }
