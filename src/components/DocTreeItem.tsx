@@ -27,7 +27,7 @@ export default function TreeNodeItem({
         }`}
         key={node.path}
         onClick={() => {
-          if (hasChildren) {
+          if (hasChildren && isSelected) {
             setIsOpen(!isOpen);
           }
           if (node.doc) {
