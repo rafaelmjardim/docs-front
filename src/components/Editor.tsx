@@ -5,7 +5,7 @@ import Highlight from "@tiptap/extension-highlight";
 import Button from "./Button";
 import { initialDoc } from "../constants/initialDoc";
 import { useEffect, useState } from "react";
-import type { Doc, TreeNode } from "../types/docs";
+import type { Doc } from "../types/docs";
 import Input from "./Input";
 
 type EditorProp = {

@@ -9,7 +9,6 @@ import { buildTree } from "./lib/tree-build";
 function App() {
   const [docs, setDocs] = useState<Doc[]>(initialDocs);
   const [tree, setTree] = useState<TreeNode[]>([]);
-  const [currentDocIndex, setCurrentDocIndex] = useState<number | null>(null);
   const [selectedDoc, setSelectedDoc] = useState<Doc | null>(null);
 
   useEffect(() => {
