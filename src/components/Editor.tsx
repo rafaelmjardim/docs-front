@@ -22,7 +22,7 @@ export default function Editor({ onSetTree, selectedDoc }: EditorProp) {
     content,
     editorProps: {
       attributes: {
-        class: "focus:outline-none",
+        class: "focus:outline-none ",
       },
     },
   });
@@ -48,19 +48,11 @@ export default function Editor({ onSetTree, selectedDoc }: EditorProp) {
       updated_at: new Date().toString(),
       content: editor.getHTML(),
     };
-
-    // const newTree: TreeNode = {
-    //   name: form.title, //Trocar pelo ultimo caminho do path
-    //   path: form.path,
-    //   doc: doc,
-    //   children: [],
-    // };
-
     return doc;
   };
 
   return (
-    <div className="flex flex-col gap-2 mx-6 my-4">
+    <div className="flex flex-col gap-2 mx-6 my-4 w-full">
       <Input
         label="Título"
         placeholder="Títiulo"
@@ -78,7 +70,7 @@ export default function Editor({ onSetTree, selectedDoc }: EditorProp) {
       </p>
       <EditorContent
         editor={editor}
-        className="prose border mt-4 border-gray-300 rounded-md px-8 w-full max-w-full"
+        className="prose border mt-4 border-gray-300 rounded-md px-8 w-full max-w-full min-h-[30rem]"
       />
 
       <div className="flex items-center gap-2">
