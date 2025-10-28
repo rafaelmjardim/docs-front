@@ -5,9 +5,12 @@ export function buildTree(documents: Doc[]): TreeNode[] {
   const nodeMap = new Map<string, TreeNode>();
 
   // Ordenar documentos por path
-  const sortedDocs = [...documents].sort((a, b) =>
-    a.path.localeCompare(b.path)
-  );
+  // const sortedDocs = [...documents].sort((a, b) =>
+  //   a.path.localeCompare(b.path)
+  // );
+
+  // Ordenar documentos por id
+  const sortedDocs = [...documents].sort((a, b) => a.id.localeCompare(b.id));
 
   sortedDocs.forEach((doc) => {
     const parts = doc.path.split("/");
