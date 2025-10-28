@@ -22,7 +22,7 @@ export default function Editor({ onSetTree, selectedDoc }: EditorProp) {
     content,
     editorProps: {
       attributes: {
-        class: "focus:outline-none ",
+        class: "focus:outline-none pt-10 min-h-[30rem] ",
       },
     },
   });
@@ -70,7 +70,7 @@ export default function Editor({ onSetTree, selectedDoc }: EditorProp) {
       </p>
       <EditorContent
         editor={editor}
-        className="prose border mt-4 border-gray-300 rounded-md px-8 w-full max-w-full min-h-[30rem]"
+        className="prose border mt-4 border-gray-300 rounded-md px-8 w-full max-w-full "
       />
 
       <div className="flex items-center gap-2">

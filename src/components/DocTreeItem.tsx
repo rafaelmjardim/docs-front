@@ -35,7 +35,7 @@ export default function TreeNodeItem({
           }
         }}
       >
-        {node.name}
+        {node.doc?.title}
 
         {hasChildren && (
           <ChevronRight
