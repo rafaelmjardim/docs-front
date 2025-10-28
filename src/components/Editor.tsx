@@ -5,15 +5,15 @@ import Highlight from "@tiptap/extension-highlight";
 import Button from "./Button";
 import { initialDoc } from "../constants/initialDoc";
 import { useEffect, useState } from "react";
-import type { Doc } from "../types/docs";
+import type { Doc, TreeNode } from "../types/docs";
 import Input from "./Input";
 
 type EditorProp = {
-  onSetDoc: (doc: Doc) => void;
+  onSetTree: (tree: TreeNode) => void;
   currentDoc: Doc | null;
 };
 
-export default function Editor({ onSetDoc, currentDoc }: EditorProp) {
+export default function Editor({ onSetTree, currentDoc }: EditorProp) {
   const [form, setForm] = useState({ title: "", path: "" });
   const [content, setContent] = useState<string>(initialDoc);
 
@@ -39,7 +39,7 @@ export default function Editor({ onSetDoc, currentDoc }: EditorProp) {
     }
   }, [currentDoc, editor]);
 
-  const handleSetDoc = () => {
+  const handleSetTree = () => {
     const doc: Doc = {
       id: "",
       title: form.title,
@@ -49,7 +49,14 @@ export default function Editor({ onSetDoc, currentDoc }: EditorProp) {
       content: editor.getHTML(),
     };
 
-    return doc;
+    const newTree: TreeNode = {
+      name: form.title, //Trocar pelo ultimo caminho do path
+      path: form.path,
+      doc: doc,
+      children: [],
+    };
+
+    return newTree;
   };
 
   return (
@@ -73,7 +80,7 @@ export default function Editor({ onSetDoc, currentDoc }: EditorProp) {
         editor={editor}
         className="prose border mt-4 border-gray-300 rounded-md px-8 w-full max-w-full"
       />
-      <Button onClick={() => onSetDoc(handleSetDoc())}>Salvar</Button>
+      <Button onClick={() => onSetTree(handleSetTree())}>Salvar</Button>
     </div>
   );
 }

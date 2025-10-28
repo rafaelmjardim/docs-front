@@ -1,17 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Editor from "./components/Editor";
 import Header from "./components/Header";
 import Nav from "./components/DocNav";
-import type { Doc } from "./types/docs";
+import type { Doc, TreeNode } from "./types/docs";
+import { initialDocs } from "./lib/storage";
+import { buildTree } from "./lib/tree-build";
 
 function App() {
   const [docs, setDocs] = useState<Doc[]>([]);
+  const [tree, setTree] = useState<TreeNode[]>([]);
   const [currentDocIndex, setCurrentDocIndex] = useState<number | null>(null);
+  const [selectedDoc, setSelectedDoc] = useState<Doc | null>(null);
 
-  const handleSetDoc = (newDoc: Doc) => {
-    const docsList = [...docs, newDoc];
-    setDocs(docsList);
-    console.log("docsList", docsList);
+  useEffect(() => {
+    loadDocs();
+  }, []);
+
+  const handleSelectNode = (node: TreeNode) => {
+    if (node.doc) {
+      setSelectedDoc(node.doc);
+      console.log("selected Doc", selectedDoc);
+    }
+  };
+
+  const loadDocs = () => {
+    const docs = getDocs();
+    setDocs(docs);
+    setTree(buildTree(docs));
+
+    if (!selectedDoc && docs.length > 0) {
+      setSelectedDoc(docs[0]);
+    }
+  };
+
+  const getDocs = () => {
+    return initialDocs;
   };
 
   return (
@@ -19,9 +42,13 @@ function App() {
       <div className="h-full">
         <Header />
         <main className="flex h-screen">
-          <Nav docs={docs} onCurrentDocIndex={setCurrentDocIndex} />
+          <Nav
+            nodes={tree}
+            onSelect={handleSelectNode}
+            onCurrentDocIndex={setCurrentDocIndex}
+          />
           <Editor
-            onSetDoc={handleSetDoc}
+            onSetTree={handleSelectNode}
             currentDoc={currentDocIndex !== null ? docs[currentDocIndex] : null}
           />
         </main>
