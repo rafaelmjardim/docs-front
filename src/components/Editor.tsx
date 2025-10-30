@@ -28,6 +28,7 @@ export default function Editor({
   const editor = useEditor({
     extensions: [StarterKit, Highlight, Typography],
     content,
+    editable: mode === "edit",
     editorProps: {
       attributes: {
         class: "focus:outline-none min-h-[30rem] ",
@@ -45,7 +46,15 @@ export default function Editor({
       editor.commands.setContent(selectedDoc.content);
       setContent(selectedDoc.content);
     }
+
+    if (selectedDoc) {
+      setForm({ title: selectedDoc.title, path: selectedDoc.path });
+    }
   }, [selectedDoc, editor]);
+
+  useEffect(() => {
+    editor.setEditable(mode === "edit" ? true : false);
+  }, [mode, editor]);
 
   const handleSaveDoc = () => {
     const doc: Doc = {
@@ -62,7 +71,17 @@ export default function Editor({
 
   return (
     <div className="flex flex-col gap-2 mx-6 my-4 w-full transition-all">
-      <div className="w-full flex justify-end">
+      <div className="w-full flex items-center justify-end gap-2">
+        {mode === "edit" && (
+          <Button
+            className="bg-transparent text-slate-700 border border-slate-500 hover:bg-slate-100"
+            onClick={() => {
+              onChangeMode("view");
+            }}
+          >
+            Cancelar
+          </Button>
+        )}
         <Button
           className="bg-slate-600 hover:bg-slate-700"
           onClick={() => {
@@ -84,12 +103,14 @@ export default function Editor({
             label="Título"
             placeholder="Títiulo"
             name="title"
+            value={form.title}
             onChange={handleChangeInput}
           ></Input>
           <Input
             label="Path"
             placeholder="Ex: home/projeto-x/front-end/components/card-component "
             name="path"
+            value={form.path}
             onChange={handleChangeInput}
           ></Input>
           <p className="text-xs text-gray-500">
@@ -97,7 +118,7 @@ export default function Editor({
           </p>
           <EditorContent
             editor={editor}
-            className="prose border mt-4 border-gray-300 rounded-md px-8 w-full max-w-full "
+            className="prose border mt-4 pt-6 border-gray-300 rounded-md px-8 w-full max-w-full "
           />
         </>
       ) : (
