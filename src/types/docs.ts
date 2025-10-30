@@ -13,3 +13,5 @@ export type TreeNode = {
   children: TreeNode[];
   doc?: Doc;
 };
+
+export type EditMode = "view" | "edit";

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Editor from "./components/Editor";
 import Header from "./components/Header";
 import Nav from "./components/DocNav";
-import type { Doc, TreeNode } from "./types/docs";
+import type { Doc, EditMode, TreeNode } from "./types/docs";
 import { initialDocs } from "./lib/storage";
 import { buildTree } from "./lib/tree-build";
 
@@ -10,6 +10,7 @@ function App() {
   const [docs, setDocs] = useState<Doc[]>(initialDocs);
   const [tree, setTree] = useState<TreeNode[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<Doc | null>(null);
+  const [editMode, setEditMode] = useState<EditMode>("view");
 
   useEffect(() => {
     loadDocs();
@@ -39,6 +40,10 @@ function App() {
     loadDocs();
   };
 
+  const handleSetEditMod = (mode: EditMode) => {
+    setEditMode(mode);
+  };
+
   return (
     <>
       <div className="h-full">
@@ -49,7 +54,12 @@ function App() {
             onSelect={handleSelectNode}
             selectedPath={selectedDoc?.path}
           />
-          <Editor onSetTree={setNewDoc} selectedDoc={selectedDoc} />
+          <Editor
+            onSetTree={setNewDoc}
+            selectedDoc={selectedDoc}
+            onChangeMode={handleSetEditMod}
+            mode={editMode}
+          />
         </main>
       </div>
     </>
