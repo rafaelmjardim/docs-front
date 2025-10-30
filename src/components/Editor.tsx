@@ -7,7 +7,7 @@ import { initialDoc } from "../constants/initialDoc";
 import { useEffect, useState } from "react";
 import type { Doc, EditMode } from "../types/docs";
 import Input from "./Input";
-import { Pencil, Save } from "lucide-react";
+import { File, Pencil, Save } from "lucide-react";
 
 type EditorProp = {
   onSetTree: (doc: Doc) => void;
@@ -69,6 +69,12 @@ export default function Editor({
     onSetTree(doc);
   };
 
+  const handleNewPage = () => {
+    onChangeMode("edit");
+    setForm({ title: "", path: "" });
+    editor.commands.setContent("");
+  };
+
   return (
     <div className="flex flex-col gap-2 mx-6 my-4 w-full transition-all">
       <div className="w-full flex items-center justify-end gap-2">
@@ -90,12 +96,22 @@ export default function Editor({
           }}
         >
           {mode == "view" ? (
-            <Pencil size={15} strokeWidth={1.8} />
+            <Pencil size={16} strokeWidth={1.8} />
           ) : (
-            <Save size={15} strokeWidth={1.8} />
+            <Save size={16} strokeWidth={1.8} />
           )}
           {mode == "view" ? "Editar" : "Salvar"}
         </Button>
+
+        {mode === "view" && (
+          <Button
+            className="bg-slate-600 hover:bg-slate-700"
+            onClick={handleNewPage}
+          >
+            <File size={16}></File>
+            Nova página
+          </Button>
+        )}
       </div>
       {mode === "edit" ? (
         <>
