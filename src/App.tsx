@@ -19,7 +19,10 @@ function App() {
   const handleSelectNode = (node: TreeNode) => {
     if (node.doc) {
       setSelectedDoc(node.doc);
-      console.log("selected Doc", selectedDoc);
+
+      if (editMode === "edit") {
+        setEditMode("view");
+      }
     }
   };
 
