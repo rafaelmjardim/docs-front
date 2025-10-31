@@ -65,7 +65,7 @@ function App() {
     const index = docs.findIndex((d) => d.id === id);
     if (index === -1) return null;
 
-    docs[index] = {
+    tree[index].doc = {
       ...docs[index],
       ...updates,
       updated_at: new Date().toISOString(),
