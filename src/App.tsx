@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Editor from "./components/Editor";
 import Header from "./components/Header";
 import Nav from "./components/DocNav";
-import type { Doc, EditMode, TreeNode } from "./types/docs";
+import type { Doc, Mode, TreeNode } from "./types/docs";
 import { initialDocs } from "./lib/storage";
 import { buildTree } from "./lib/tree-build";
 
@@ -10,18 +10,24 @@ function App() {
   const [docs, setDocs] = useState<Doc[]>(initialDocs);
   const [tree, setTree] = useState<TreeNode[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<Doc | null>(null);
-  const [editMode, setEditMode] = useState<EditMode>("view");
+  const [mode, setMode] = useState<Mode>("view");
 
   useEffect(() => {
     loadDocs();
   }, []);
 
+  useEffect(() => {
+    if (mode === "create") {
+      setSelectedDoc(null);
+    }
+  }, [mode, selectedDoc]);
+
   const handleSelectNode = (node: TreeNode) => {
     if (node.doc) {
       setSelectedDoc(node.doc);
 
-      if (editMode === "edit") {
-        setEditMode("view");
+      if (mode === "edit") {
+        setMode("view");
       }
     }
   };
@@ -36,15 +42,35 @@ function App() {
     }
   };
 
-  const setNewDoc = (doc: Doc) => {
+  const setNewDoc = (data: Doc) => {
     const newDocList = docs;
-    newDocList.push(doc);
-    setDocs(newDocList);
-    loadDocs();
+    if (mode === "create") {
+      newDocList.push(data);
+      setDocs(newDocList);
+      loadDocs();
+    } else if (selectedDoc) {
+      console.log("modo edicao");
+      const updated = updateDoc(selectedDoc.id, data);
+      if (updated) {
+        setSelectedDoc(updated);
+      }
+    }
   };
 
-  const handleSetEditMod = (mode: EditMode) => {
-    setEditMode(mode);
+  const handleSetEditMod = (newMode: Mode) => {
+    setMode(newMode);
+  };
+
+  const updateDoc = (id: string, updates: Partial<Document>): Doc | null => {
+    const index = docs.findIndex((d) => d.id === id);
+    if (index === -1) return null;
+
+    docs[index] = {
+      ...docs[index],
+      ...updates,
+      updated_at: new Date().toISOString(),
+    };
+    return docs[index];
   };
 
   return (
@@ -61,7 +87,7 @@ function App() {
             onSetTree={setNewDoc}
             selectedDoc={selectedDoc}
             onChangeMode={handleSetEditMod}
-            mode={editMode}
+            mode={mode}
           />
         </main>
       </div>

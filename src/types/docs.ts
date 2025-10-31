@@ -14,4 +14,4 @@ export type TreeNode = {
   doc?: Doc;
 };
 
-export type EditMode = "view" | "edit";
+export type Mode = "view" | "edit" | "create";

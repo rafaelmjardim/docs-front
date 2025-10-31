@@ -5,15 +5,15 @@ import Highlight from "@tiptap/extension-highlight";
 import Button from "./Button";
 import { initialDoc } from "../constants/initialDoc";
 import { useEffect, useState } from "react";
-import type { Doc, EditMode } from "../types/docs";
+import type { Doc, Mode } from "../types/docs";
 import Input from "./Input";
 import { File, Pencil, Save } from "lucide-react";
 
 type EditorProp = {
   onSetTree: (doc: Doc) => void;
   selectedDoc: Doc | null;
-  mode: EditMode;
-  onChangeMode: (mode: EditMode) => void;
+  mode: Mode;
+  onChangeMode: (mode: Mode) => void;
 };
 
 export default function Editor({
@@ -53,7 +53,7 @@ export default function Editor({
   }, [selectedDoc, editor]);
 
   useEffect(() => {
-    editor.setEditable(mode === "edit" ? true : false);
+    editor.setEditable(mode === "view" ? false : true);
   }, [mode, editor]);
 
   const handleSaveDoc = () => {
@@ -70,48 +70,50 @@ export default function Editor({
   };
 
   const handleNewPage = () => {
-    onChangeMode("edit");
+    onChangeMode("create");
     setForm({ title: "", path: "" });
     editor.commands.setContent("");
   };
 
   return (
     <div className="flex flex-col gap-2 mx-6 my-4 w-full transition-all">
-      <div className="w-full flex items-center justify-end gap-2">
-        {mode === "edit" && (
-          <Button
-            className="bg-transparent text-slate-700 border border-slate-500 hover:bg-slate-100"
-            onClick={() => {
-              onChangeMode("view");
-            }}
-          >
-            Cancelar
-          </Button>
-        )}
-        <Button
-          className="bg-slate-600 hover:bg-slate-700"
-          onClick={() => {
-            if (mode === "view") onChangeMode("edit");
-            if (mode === "edit") handleSaveDoc();
-          }}
-        >
-          {mode == "view" ? (
-            <Pencil size={16} strokeWidth={1.8} />
-          ) : (
-            <Save size={16} strokeWidth={1.8} />
+      <div className="w-full flex items-center justify-between">
+        <div className="flex items-center justify-end gap-2 w-full">
+          {mode === "edit" && (
+            <Button
+              className="bg-transparent text-slate-700 border border-slate-500 hover:bg-slate-100"
+              onClick={() => {
+                onChangeMode("view");
+              }}
+            >
+              Cancelar
+            </Button>
           )}
-          {mode == "view" ? "Editar" : "Salvar"}
-        </Button>
-
-        {mode === "view" && (
           <Button
             className="bg-slate-600 hover:bg-slate-700"
-            onClick={handleNewPage}
+            onClick={() => {
+              if (mode === "view") onChangeMode("edit");
+              if (mode === "edit") handleSaveDoc();
+            }}
           >
-            <File size={16}></File>
-            Nova página
+            {mode == "view" ? (
+              <Pencil size={16} strokeWidth={1.8} />
+            ) : (
+              <Save size={16} strokeWidth={1.8} />
+            )}
+            {mode == "view" ? "Editar" : "Salvar"}
           </Button>
-        )}
+
+          {mode === "view" && (
+            <Button
+              className="bg-slate-600 hover:bg-slate-700"
+              onClick={handleNewPage}
+            >
+              <File size={16}></File>
+              Nova página
+            </Button>
+          )}
+        </div>
       </div>
       {mode === "edit" ? (
         <>
