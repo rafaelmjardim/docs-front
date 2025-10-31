@@ -14,6 +14,7 @@ type EditorProp = {
   selectedDoc: Doc | null;
   mode: Mode;
   onChangeMode: (mode: Mode) => void;
+  onCancel: (id: string) => void;
 };
 
 export default function Editor({
@@ -21,9 +22,11 @@ export default function Editor({
   selectedDoc,
   mode,
   onChangeMode,
+  onCancel,
 }: EditorProp) {
   const [form, setForm] = useState({ title: "", path: "" });
   const [content, setContent] = useState<string>(initialDoc);
+  const [lastDocSelected, setLastDocSelected] = useState<string | null>(null);
 
   const editor = useEditor({
     extensions: [StarterKit, Highlight, Typography],
@@ -70,6 +73,9 @@ export default function Editor({
   };
 
   const handleNewPage = () => {
+    if (selectedDoc) {
+      setLastDocSelected(selectedDoc.id);
+    }
     onChangeMode("create");
     setForm({ title: "", path: "" });
     editor.commands.setContent("");
@@ -79,11 +85,14 @@ export default function Editor({
     <div className="flex flex-col gap-2 mx-6 my-4 w-full transition-all">
       <div className="w-full flex items-center justify-between">
         <div className="flex items-center justify-end gap-2 w-full">
-          {mode === "edit" && (
+          {mode !== "view" && (
             <Button
               className="bg-transparent text-slate-700 border border-slate-500 hover:bg-slate-100"
               onClick={() => {
                 onChangeMode("view");
+                if (lastDocSelected && mode === "create") {
+                  onCancel(lastDocSelected);
+                }
               }}
             >
               Cancelar
@@ -115,7 +124,7 @@ export default function Editor({
           )}
         </div>
       </div>
-      {mode === "edit" ? (
+      {mode !== "view" ? (
         <>
           <Input
             label="Título"

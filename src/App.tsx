@@ -87,6 +87,12 @@ function App() {
             onSetTree={setNewDoc}
             selectedDoc={selectedDoc}
             onChangeMode={handleSetEditMod}
+            onCancel={(idLastDoc) => {
+              if (idLastDoc) {
+                const index = Number(idLastDoc) - 1;
+                setSelectedDoc(docs[index]);
+              }
+            }}
             mode={mode}
           />
         </main>
