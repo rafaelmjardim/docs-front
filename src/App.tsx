@@ -5,6 +5,7 @@ import Nav from "./components/DocNav";
 import type { Doc, Mode, TreeNode } from "./types/docs";
 import { initialDocs } from "./lib/storage";
 import { buildTree } from "./lib/tree-build";
+import axios from "axios";
 
 function App() {
   const [docs, setDocs] = useState<Doc[]>(initialDocs);
@@ -13,6 +14,16 @@ function App() {
   const [mode, setMode] = useState<Mode>("view");
 
   useEffect(() => {
+    const fetchTeste = async () => {
+      try {
+        const res = await axios.get(import.meta.env.VITE_API_URL);
+        console.log(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTeste();
+
     loadDocs();
   }, []);
 
