@@ -5,6 +5,7 @@ export const initialDocs: Doc[] = [
     id: "1",
     title: "Introdução",
     path: "introducao",
+    category: "INICIO",
     content: `
       <h1>Introdução</h1>
       <p>Bem-vindo à página de <strong>documentação oficial</strong> dos projetos da Agger. Aqui você encontrará informações detalhadas sobre todos os produtos e serviços que desenvolvemos, com uma abordagem focada em atender tanto as necessidades técnicas dos desenvolvedores quanto as instruções de uso para a equipe de suporte e usuários finais.</p>
@@ -35,6 +36,7 @@ export const initialDocs: Doc[] = [
     id: "2",
     title: "Nova Plataforma",
     path: "nova-plataforma",
+    category: "DESENVOLVEDORES",
     content: "<h1>Nova plataforma</h1>",
     format: "markdown",
     updated_at: new Date().toISOString(),
@@ -43,6 +45,7 @@ export const initialDocs: Doc[] = [
     id: "3",
     title: "Frontend",
     path: "nova-plataforma/frontend",
+    category: "DESENVOLVEDORES",
     content: "# Frontend\n\nDocumentação da camada frontend.",
     format: "markdown",
     updated_at: new Date().toISOString(),
@@ -51,6 +54,7 @@ export const initialDocs: Doc[] = [
     id: "4",
     title: "Conhecendo o projeto",
     path: "nova-plataforma/frontend/conhecendo-projeto",
+    category: "DESENVOLVEDORES",
     content: `
     <h1>Conhecendo o Projeto</h1></header><p>Este projeto tem como objetivo o desenvolvimento de uma plataforma completa para o ramo de seguros, integrando funcionalidades de multicálculo e gestão de corretoras em um único sistema.</p>
     <p>A aplicação permitirá a cotação simultânea entre diversas seguradoras, automatizando e otimizando o processo de simulação, comparação e contratação de seguros, tudo em tempo real. Além disso, o sistema oferecerá recursos completos de gestão interna, contemplando o controle de apólices, comissionamentos, atendimentos, carteira de clientes, acompanhamento de propostas, relatórios gerenciais e outros processos essenciais ao dia a dia de uma corretora de seguros.</p>
@@ -64,6 +68,7 @@ export const initialDocs: Doc[] = [
     id: "5",
     title: "Componentes",
     path: "nova-plataforma/frontend/componentes",
+    category: "DESENVOLVEDORES",
     content: "# Componentes\n\nGuia de componentes reutilizáveis.",
     format: "markdown",
     updated_at: new Date().toISOString(),
@@ -72,6 +77,7 @@ export const initialDocs: Doc[] = [
     id: "6",
     title: "Table",
     path: "nova-plataforma/frontend/componentes/table",
+    category: "DESENVOLVEDORES",
     content: `
     <h1>Table</h1></header>
     <p>O <code>TableComponent</code> foi desenvolvido com o intuíto de construir tabelas consistentes, de uma forma fácil e organizada, ao longo de todo o sistema da plataforma. É possível criar diversos "tipos" de colunas conforme a necessidade de cada página, utilizando os cases disponíveis <a href="#casos-de-uso">aqui</a>, a tornando dinâmica e escalável.</p>
