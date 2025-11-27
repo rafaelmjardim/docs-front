@@ -24,7 +24,7 @@ export default function Editor({
   onChangeMode,
   onCancel,
 }: EditorProp) {
-  const [form, setForm] = useState({ title: "", path: "" });
+  const [form, setForm] = useState({ title: "", path: "", category: "" });
   const [content, setContent] = useState<string>(initialDoc);
   const [lastDocSelected, setLastDocSelected] = useState<string | null>(null);
 
@@ -51,7 +51,11 @@ export default function Editor({
     }
 
     if (selectedDoc) {
-      setForm({ title: selectedDoc.title, path: selectedDoc.path });
+      setForm({
+        title: selectedDoc.title,
+        path: selectedDoc.path,
+        category: selectedDoc.category,
+      });
     }
   }, [selectedDoc, editor]);
 
@@ -60,10 +64,13 @@ export default function Editor({
   }, [mode, editor]);
 
   const handleSaveDoc = () => {
+    if (isInvalidForm()) return;
+
     const doc: Doc = {
       id: "",
       title: form.title,
       path: form.path,
+      category: form.category,
       format: "markdown",
       updated_at: new Date().toString(),
       content: editor.getHTML(),
@@ -72,12 +79,16 @@ export default function Editor({
     onSetTree(doc);
   };
 
+  const isInvalidForm = (): boolean => {
+    return !form.title || !form.path || !form.category;
+  };
+
   const handleNewPage = () => {
     if (selectedDoc) {
       setLastDocSelected(selectedDoc.id);
     }
     onChangeMode("create");
-    setForm({ title: "", path: "" });
+    setForm({ title: "", path: "", category: "" });
     editor.commands.setContent("");
   };
 
@@ -101,8 +112,8 @@ export default function Editor({
           <Button
             className="bg-slate-600 hover:bg-slate-700"
             onClick={() => {
-              if (mode === "view") onChangeMode("edit");
-              if (mode === "edit") handleSaveDoc();
+              if (mode !== "view") handleSaveDoc();
+              else onChangeMode("edit");
             }}
           >
             {mode == "view" ? (
@@ -128,14 +139,21 @@ export default function Editor({
         <>
           <Input
             label="Título"
-            placeholder="Títiulo"
+            placeholder="Informe um título"
             name="title"
             value={form.title}
             onChange={handleChangeInput}
           ></Input>
           <Input
+            label="Categoria"
+            placeholder="Informe uma categoria"
+            name="category"
+            value={form.category}
+            onChange={handleChangeInput}
+          ></Input>
+          <Input
             label="Path"
-            placeholder="Ex: home/projeto-x/front-end/components/card-component "
+            placeholder="Ex: home/projeto/frontend "
             name="path"
             value={form.path}
             onChange={handleChangeInput}
