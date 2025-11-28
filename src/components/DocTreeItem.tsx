@@ -22,9 +22,9 @@ export default function TreeNodeItem({
   return (
     <div>
       <button
-        className={`w-full flex items-center justify-between p-2 rounded-md mb-1 hover:bg-slate-200 ${
-          isSelected ? "bg-slate-200" : ""
-        }`}
+        className={`w-full flex items-center justify-between p-2 rounded-md mb-1 hover:bg-slate-200 font-semibold ${
+          isSelected ? "bg-slate-200 text-[#005b87]" : "text-[#606770]"
+        } ${level > 1 ? "text-xs" : "text-sm"}`}
         key={node.path}
         onClick={() => {
           if (hasChildren && (!isOpen || isSelected)) {
