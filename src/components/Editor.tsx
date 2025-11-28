@@ -14,7 +14,7 @@ type EditorProp = {
   selectedDoc: Doc | null;
   mode: Mode;
   onChangeMode: (mode: Mode) => void;
-  onCancel: (id: string) => void;
+  onCancel: (id?: string) => void;
 };
 
 export default function Editor({
@@ -26,7 +26,7 @@ export default function Editor({
 }: EditorProp) {
   const [form, setForm] = useState({ title: "", path: "", category: "" });
   const [content, setContent] = useState<string>(initialDoc);
-  const [lastDocSelected, setLastDocSelected] = useState<string | null>(null);
+  const [lastDocSelected, setLastDocSelected] = useState<string | undefined>();
 
   const editor = useEditor({
     extensions: [StarterKit, Highlight, Typography],
@@ -67,7 +67,6 @@ export default function Editor({
     if (isInvalidForm()) return;
 
     const doc: Doc = {
-      id: "",
       title: form.title,
       path: form.path,
       category: form.category,
@@ -75,6 +74,7 @@ export default function Editor({
       updated_at: new Date().toString(),
       content: editor.getHTML(),
     };
+
     onChangeMode("view");
     onSetTree(doc);
   };
@@ -85,7 +85,7 @@ export default function Editor({
 
   const handleNewPage = () => {
     if (selectedDoc) {
-      setLastDocSelected(selectedDoc.id);
+      setLastDocSelected(selectedDoc?.id);
     }
     onChangeMode("create");
     setForm({ title: "", path: "", category: "" });

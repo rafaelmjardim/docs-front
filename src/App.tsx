@@ -24,7 +24,7 @@ function App() {
     // fetchTeste();
 
     loadDocs();
-  }, []);
+  }, [docs]);
 
   useEffect(() => {
     if (mode === "create") {
@@ -59,11 +59,7 @@ function App() {
       setDocs(newDocList);
       loadDocs();
     } else if (selectedDoc) {
-      console.log("modo edicao");
-      const updated = updateDoc(selectedDoc.id, data);
-      if (updated) {
-        setSelectedDoc(updated);
-      }
+      updateDoc(data);
     }
   };
 
@@ -71,18 +67,12 @@ function App() {
     setMode(newMode);
   };
 
-  const updateDoc = (id: string, updates: Partial<Document>): Doc | null => {
-    const index = docs.findIndex((d) => d.id === id);
-    if (index === -1) return null;
+  const updateDoc = (docUpdated: Doc) => {
+    const docsUpdated = docs.map((doc) =>
+      doc.id == selectedDoc?.id ? { ...doc, ...docUpdated } : doc
+    );
 
-    console.log("updates", updates);
-
-    // tree[index].doc = {
-    //   ...docs[index],
-    //   ...updates,
-    //   updated_at: new Date().toISOString(),
-    // };
-    return docs[index];
+    setDocs(docsUpdated);
   };
 
   return (
