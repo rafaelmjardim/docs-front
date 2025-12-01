@@ -36,7 +36,7 @@ function App() {
     if (node.doc) {
       setSelectedDoc(node.doc);
 
-      if (mode === "edit") {
+      if (mode !== "view") {
         setMode("view");
       }
     }
@@ -76,30 +76,28 @@ function App() {
   };
 
   return (
-    <>
-      <div className="h-full">
-        <Header />
-        <main className="flex h-screen">
-          <Nav
-            treeGroup={treeGroup}
-            onSelect={handleSelectNode}
-            selectedPath={selectedDoc?.path}
-          />
-          <Editor
-            onSetTree={setNewDoc}
-            selectedDoc={selectedDoc}
-            onChangeMode={handleSetEditMod}
-            onCancel={(idLastDoc) => {
-              if (idLastDoc) {
-                const index = Number(idLastDoc) - 1;
-                setSelectedDoc(docs[index]);
-              }
-            }}
-            mode={mode}
-          />
-        </main>
-      </div>
-    </>
+    <div className="flex flex-col">
+      <Header />
+      <main className="flex">
+        <Nav
+          treeGroup={treeGroup}
+          onSelect={handleSelectNode}
+          selectedPath={selectedDoc?.path}
+        />
+        <Editor
+          onSetTree={setNewDoc}
+          selectedDoc={selectedDoc}
+          onChangeMode={handleSetEditMod}
+          onCancel={(idLastDoc) => {
+            if (idLastDoc) {
+              const index = Number(idLastDoc) - 1;
+              setSelectedDoc(docs[index]);
+            }
+          }}
+          mode={mode}
+        />
+      </main>
+    </div>
   );
 }
 
