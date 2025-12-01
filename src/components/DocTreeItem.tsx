@@ -24,7 +24,11 @@ export default function TreeNodeItem({
       <button
         className={`w-full flex items-center justify-between p-2 rounded-md mb-1 hover:bg-slate-200 font-semibold ${
           isSelected ? "bg-slate-200 text-[#005b87]" : "text-[#606770]"
-        } ${level > 1 ? "text-xs" : "text-sm"}`}
+        } ${level > 1 ? "text-xs" : "text-sm"} ${
+          isSelected && level > 1 && !node.children.length
+            ? "border-l-4 border-[#005b87]"
+            : ""
+        }`}
         key={node.path}
         onClick={() => {
           if (hasChildren && (!isOpen || isSelected)) {
