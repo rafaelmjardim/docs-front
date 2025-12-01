@@ -2,30 +2,29 @@ import { useEffect, useState } from "react";
 import Editor from "./components/Editor";
 import Header from "./components/Header";
 import Nav from "./components/DocNav";
-import type { Doc, Mode, TreeNode } from "./types/docs";
+import type { Doc, Mode, TreeNode, TreeNodeGroup } from "./types/docs";
 import { initialDocs } from "./lib/storage";
-import { buildTree } from "./lib/tree-build";
-import axios from "axios";
+import { buildTreeByCategory } from "./lib/build-tree-category";
 
 function App() {
   const [docs, setDocs] = useState<Doc[]>(initialDocs);
-  const [tree, setTree] = useState<TreeNode[]>([]);
+  const [treeGroup, setTreeGroup] = useState<TreeNodeGroup[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<Doc | null>(null);
   const [mode, setMode] = useState<Mode>("view");
 
   useEffect(() => {
-    const fetchTeste = async () => {
-      try {
-        const res = await axios.get(import.meta.env.VITE_API_URL);
-        console.log(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchTeste();
+    // const fetchTeste = async () => {
+    //   try {
+    //     const res = await axios.get(import.meta.env.VITE_API_URL);
+    //     console.log(res.data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
+    // fetchTeste();
 
     loadDocs();
-  }, []);
+  }, [docs]);
 
   useEffect(() => {
     if (mode === "create") {
@@ -46,7 +45,7 @@ function App() {
   const loadDocs = () => {
     const docList = docs;
     setDocs(docList);
-    setTree(buildTree(docs));
+    setTreeGroup(buildTreeByCategory(docs));
 
     if (!selectedDoc && docs.length > 0) {
       setSelectedDoc(docs[0]);
@@ -60,11 +59,7 @@ function App() {
       setDocs(newDocList);
       loadDocs();
     } else if (selectedDoc) {
-      console.log("modo edicao");
-      const updated = updateDoc(selectedDoc.id, data);
-      if (updated) {
-        setSelectedDoc(updated);
-      }
+      updateDoc(data);
     }
   };
 
@@ -72,16 +67,12 @@ function App() {
     setMode(newMode);
   };
 
-  const updateDoc = (id: string, updates: Partial<Document>): Doc | null => {
-    const index = docs.findIndex((d) => d.id === id);
-    if (index === -1) return null;
+  const updateDoc = (docUpdated: Doc) => {
+    const docsUpdated = docs.map((doc) =>
+      doc.id == selectedDoc?.id ? { ...doc, ...docUpdated } : doc
+    );
 
-    tree[index].doc = {
-      ...docs[index],
-      ...updates,
-      updated_at: new Date().toISOString(),
-    };
-    return docs[index];
+    setDocs(docsUpdated);
   };
 
   return (
@@ -90,7 +81,7 @@ function App() {
         <Header />
         <main className="flex h-screen">
           <Nav
-            nodes={tree}
+            treeGroup={treeGroup}
             onSelect={handleSelectNode}
             selectedPath={selectedDoc?.path}
           />

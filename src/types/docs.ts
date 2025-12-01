@@ -1,10 +1,18 @@
 export type Doc = {
-  id: string;
+  id?: string;
   title: string;
   path: string;
   content: string;
+  category: string;
   format: "markdown";
   updated_at: string;
+};
+
+// export type DocDTO = Omit<Doc, "id">;
+
+export type TreeNodeGroup = {
+  category: string;
+  items: TreeNode[];
 };
 
 export type TreeNode = {
