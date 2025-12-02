@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Editor from "./components/Editor";
 import Header from "./components/Header";
 import Nav from "./components/DocNav";
 import type { Doc, Mode, TreeNode, TreeNodeGroup } from "./types/docs";
 import { initialDocs } from "./lib/storage";
 import { buildTreeByCategory } from "./lib/build-tree-category";
+import MainView from "./components/MainView";
 
 function App() {
   const [docs, setDocs] = useState<Doc[]>(initialDocs);
@@ -84,7 +84,7 @@ function App() {
           onSelect={handleSelectNode}
           selectedPath={selectedDoc?.path}
         />
-        <Editor
+        <MainView
           onSetTree={setNewDoc}
           selectedDoc={selectedDoc}
           onChangeMode={handleSetEditMod}

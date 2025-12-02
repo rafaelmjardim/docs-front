@@ -1,4 +1,4 @@
-import { EditorContent, useEditor } from "@tiptap/react";
+import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Typography from "@tiptap/extension-typography";
 import Highlight from "@tiptap/extension-highlight";
@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import type { Doc, Mode } from "../types/docs";
 import Input from "./Input";
 import { File, Pencil, Save } from "lucide-react";
+import { MyEditor } from "./MyEditor";
 
 type EditorProp = {
   onSetTree: (doc: Doc) => void;
@@ -17,7 +18,7 @@ type EditorProp = {
   onCancel: (id?: string) => void;
 };
 
-export default function Editor({
+export default function MainView({
   onSetTree,
   selectedDoc,
   mode,
@@ -161,16 +162,19 @@ export default function Editor({
           <p className="text-xs text-gray-500">
             Use / para criar hierarquia (ex: home/projeto/frontend)
           </p>
-          <EditorContent
+
+          <MyEditor editor={editor} isEditable={true} />
+          {/* <EditorContent
             editor={editor}
             className="prose border mt-4 pt-6 border-gray-300 rounded-md px-8 w-full max-w-full "
-          />
+          /> */}
         </>
       ) : (
-        <EditorContent
-          editor={editor}
-          className="prose rounded-md px-8 w-full max-w-[60rem] "
-        />
+        // <EditorContent
+        //   editor={editor}
+        //   className="prose rounded-md px-8 w-full max-w-[60rem] "
+        // />
+        <MyEditor editor={editor} />
       )}
     </div>
   );
