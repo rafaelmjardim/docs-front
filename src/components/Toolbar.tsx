@@ -13,6 +13,13 @@ import {
   type LucideProps,
 } from "lucide-react";
 
+import { Editor } from "@tiptap/react";
+
+interface ToolbarProps {
+  onChangeBold: () => void;
+  editor: Editor | null;
+}
+
 interface ToolbarButton {
   icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref">>;
   label: string;
@@ -20,7 +27,7 @@ interface ToolbarButton {
   hasSeparator?: boolean;
 }
 
-export function Toolbar() {
+export function Toolbar({ onChangeBold }: ToolbarProps) {
   const toolbarButtons: ToolbarButton[] = [
     { icon: Undo, label: "Desfazer", action: () => "" },
     { icon: Redo, label: "Refazer", action: () => "", hasSeparator: true },
@@ -45,7 +52,7 @@ export function Toolbar() {
       action: () => "",
       hasSeparator: true,
     },
-    { icon: Bold, label: "Bold", action: () => alert("em desenvolvimento") },
+    { icon: Bold, label: "Bold", action: onChangeBold },
     { icon: Italic, label: "Italico", action: () => "", hasSeparator: true },
     { icon: TextAlignStart, label: "Alinhar no inicio", action: () => "" },
     { icon: TextAlignCenter, label: "Alinhar ao centro", action: () => "" },
@@ -55,7 +62,7 @@ export function Toolbar() {
   return (
     <div className="flex jus gap-1 mb-3 pb-2 border-b w-full ">
       {toolbarButtons.map((item, index) => (
-        <div className="flex items-center">
+        <div key={index} className="flex items-center">
           <button
             className="p-2 text-gray-600 rounded-md hover:bg-slate-100 transition-colors  border-gray-200"
             key={index}

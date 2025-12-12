@@ -15,7 +15,10 @@ export function MyEditor({ editor, isEditable }: MyEditorProps) {
     >
       {isEditable && (
         <div className="flex items-center gap-1">
-          <Toolbar />
+          <Toolbar
+            editor={editor}
+            onChangeBold={() => editor?.chain().focus().toggleBold().run()}
+          />
         </div>
       )}
       <EditorContent
