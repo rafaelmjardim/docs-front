@@ -124,7 +124,7 @@ export function Toolbar({ editor }: ToolbarProps) {
   ];
 
   return (
-    <div className="flex jus gap-1 mb-3 pb-2 border-b w-full ">
+    <div className="flex jus gap-1 mb-3 p-2 border-b w-full bg-white">
       {toolbarButtons.map((item, index) => (
         <div key={index} className="flex items-center">
           <button
