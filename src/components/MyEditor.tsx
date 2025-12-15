@@ -2,7 +2,7 @@ import { Editor, EditorContent } from "@tiptap/react";
 import { Toolbar } from "./Toolbar";
 
 type MyEditorProps = {
-  editor: Editor | null;
+  editor: Editor;
   isEditable?: boolean;
 };
 
@@ -15,10 +15,7 @@ export function MyEditor({ editor, isEditable }: MyEditorProps) {
     >
       {isEditable && (
         <div className="flex items-center gap-1">
-          <Toolbar
-            editor={editor}
-            onChangeBold={() => editor?.chain().focus().toggleBold().run()}
-          />
+          <Toolbar editor={editor} />
         </div>
       )}
       <EditorContent

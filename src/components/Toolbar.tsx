@@ -13,50 +13,114 @@ import {
   type LucideProps,
 } from "lucide-react";
 
-import { Editor } from "@tiptap/react";
+import { Editor, useEditorState } from "@tiptap/react";
 
 interface ToolbarProps {
-  onChangeBold: () => void;
-  editor: Editor | null;
+  editor: Editor;
 }
 
 interface ToolbarButton {
   icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref">>;
   label: string;
   action: () => void;
+  isActive?: boolean;
+  isDisabled?: boolean;
   hasSeparator?: boolean;
 }
 
-export function Toolbar({ onChangeBold }: ToolbarProps) {
+export function Toolbar({ editor }: ToolbarProps) {
+  const editorState = useEditorState({
+    editor,
+    selector: (ctx) => {
+      return {
+        isBold: ctx.editor.isActive("bold") ?? false,
+        canBold: ctx.editor.can().chain().toggleBold().run() ?? false,
+        isItalic: ctx.editor.isActive("italic") ?? false,
+        canItalic: ctx.editor.can().chain().toggleItalic().run() ?? false,
+        isParagraph: ctx.editor.isActive("paragraph") ?? false,
+        isHeading1: ctx.editor.isActive("heading", { level: 1 }) ?? false,
+        isHeading2: ctx.editor.isActive("heading", { level: 2 }) ?? false,
+        isCodeBlock: ctx.editor.isActive("codeBlock") ?? false,
+        isBulletList: ctx.editor.isActive("bulletList") ?? false,
+        isAlignStart: ctx.editor.isActive({ textAlign: "left" }) ?? false,
+        isAlignCenter: ctx.editor.isActive({ textAlign: "center" }) ?? false,
+        isAlignEnd: ctx.editor.isActive({ textAlign: "right" }) ?? false,
+        canUndo: ctx.editor.can().chain().undo().run() ?? false,
+        canRedo: ctx.editor.can().chain().redo().run() ?? false,
+      };
+    },
+  });
+
   const toolbarButtons: ToolbarButton[] = [
-    { icon: Undo, label: "Desfazer", action: () => "" },
-    { icon: Redo, label: "Refazer", action: () => "", hasSeparator: true },
+    {
+      icon: Undo,
+      label: "Desfazer",
+      isDisabled: !editorState.canUndo,
+      action: () => editor.chain().focus().undo().run(),
+    },
+    {
+      icon: Redo,
+      label: "Refazer",
+      isDisabled: !editorState.canRedo,
+      action: () => editor.chain().focus().redo().run(),
+      hasSeparator: true,
+    },
     {
       icon: Heading1,
       label: "Heading 1",
-      action: () => "",
+      isActive: editorState.isHeading1,
+      action: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
     },
     {
       icon: Heading2,
       label: "Heading 2",
-      action: () => "",
+      isActive: editorState.isHeading2,
+      action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
     },
     {
       icon: List,
       label: "Lista",
-      action: () => "",
+      isActive: editorState.isBulletList,
+      action: () => editor.chain().focus().toggleBulletList().run(),
     },
     {
       icon: Code,
       label: "Bloco de código",
-      action: () => "",
+      isActive: editorState.isCodeBlock,
+      action: () => editor.chain().focus().toggleCodeBlock().run(),
       hasSeparator: true,
     },
-    { icon: Bold, label: "Bold", action: onChangeBold },
-    { icon: Italic, label: "Italico", action: () => "", hasSeparator: true },
-    { icon: TextAlignStart, label: "Alinhar no inicio", action: () => "" },
-    { icon: TextAlignCenter, label: "Alinhar ao centro", action: () => "" },
-    { icon: TextAlignEnd, label: "Alinhar no fim", action: () => "" },
+    {
+      icon: Bold,
+      label: "Bold",
+      isActive: editorState.isBold,
+      action: () => editor.chain().focus().toggleBold().run(),
+    },
+    {
+      icon: Italic,
+      label: "Italico",
+      isActive: editorState.isItalic,
+      action: () => editor.chain().focus().toggleItalic().run(),
+      hasSeparator: true,
+    },
+    {
+      icon: TextAlignStart,
+      label: "Alinhar no inicio",
+      isActive: editorState.isAlignStart,
+      action: () => editor.chain().focus().setTextAlign("left").run(),
+    },
+    {
+      icon: TextAlignCenter,
+      label: "Alinhar ao centro",
+      isActive: editorState.isAlignCenter,
+      action: () => editor.chain().focus().setTextAlign("center").run(),
+    },
+    {
+      icon: TextAlignEnd,
+      label: "Alinhar no fim",
+      isActive: editorState.isAlignEnd,
+      action: () => editor.chain().focus().setTextAlign("right").run(),
+    },
   ];
 
   return (
@@ -64,7 +128,10 @@ export function Toolbar({ onChangeBold }: ToolbarProps) {
       {toolbarButtons.map((item, index) => (
         <div key={index} className="flex items-center">
           <button
-            className="p-2 text-gray-600 rounded-md hover:bg-slate-100 transition-colors  border-gray-200"
+            data-active={item.isActive}
+            data-disabled={item.isDisabled}
+            className="p-2 text-gray-600 rounded-md hover:bg-slate-100 transition-colors  border-gray-200 data-[active=true]:text-blue-500 data-[disabled=true]:text-gray-300 data-[disabled=true]:hover:bg-transparent"
+            disabled={item.isDisabled}
             key={index}
             onClick={item.action}
             title={item.label}
