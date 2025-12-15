@@ -2,6 +2,7 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Typography from "@tiptap/extension-typography";
 import Highlight from "@tiptap/extension-highlight";
+import TextAlign from "@tiptap/extension-text-align";
 import Button from "./Button";
 import { initialDoc } from "../constants/initialDoc";
 import { useEffect, useState } from "react";
@@ -30,7 +31,14 @@ export default function MainView({
   const [lastDocSelected, setLastDocSelected] = useState<string | undefined>();
 
   const editor = useEditor({
-    extensions: [StarterKit, Highlight, Typography],
+    extensions: [
+      StarterKit,
+      Highlight,
+      Typography,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+    ],
     content,
     editable: mode === "edit",
     editorProps: {
