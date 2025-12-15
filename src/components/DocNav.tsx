@@ -9,7 +9,7 @@ type NavProps = {
 
 export default function Nav({ treeGroup, onSelect, selectedPath }: NavProps) {
   return (
-    <nav className="min-w-[300px] w-[300px] h-full p-4 bg-white border-r border-gray-200">
+    <nav className="sticky top-[3.75rem] h-[calc(100vh-3.75rem)] min-w-[300px] w-[300px] p-4 bg-white border-r border-gray-200">
       <ul className="flex flex-col gap-3">
         {treeGroup.map((category, index) => (
           <div key={index}>

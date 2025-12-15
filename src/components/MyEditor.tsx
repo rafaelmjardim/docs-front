@@ -10,7 +10,7 @@ export function MyEditor({ editor, isEditable }: MyEditorProps) {
   return (
     <div
       data-editable={isEditable}
-      className="rounded-md data-[editable=true]:border data-[editable=true]:border-gray-300 data-[editable=true]:h-[95vh] overflow-y-auto"
+      className="rounded-md data-[editable=true]:border data-[editable=true]:border-gray-300 data-[editable=true]:h-[85vh] overflow-y-auto"
     >
       {isEditable && (
         <div className="flex items-center gap-1 sticky top-0 z-10">

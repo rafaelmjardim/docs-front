@@ -76,7 +76,7 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="block">
       <Header />
       <main className="flex">
         <Nav
